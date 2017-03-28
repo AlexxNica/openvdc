@@ -25,6 +25,7 @@ function cleanup() {
     # Images don't need to be cleaned up. Removing them immediately would slow down
     # builds and they can be garbage collected later.
     for CID in $(sudo docker ps -af ancestor="${repo_and_tag}" --format "{{.ID}}"); do
+      sudo docker stop -t 30 "${CID}"
       sudo docker rm "${CID}"
     done
   else
