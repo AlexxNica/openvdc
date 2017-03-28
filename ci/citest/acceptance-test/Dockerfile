@@ -12,6 +12,8 @@ COPY ["multibox", "/multibox"]
 COPY ["run_tests.sh", "run_tests.sh"]
 COPY ["dot_openvdc-config.toml", "/home/axsh/.openvdc/config.toml"]
 RUN chown -R axsh /home/axsh/.openvdc
+# Let run_tests.sh run dump_logs().
+STOPSIGNAL SIGINT
 
 ARG BRANCH
 ARG RELEASE_SUFFIX
