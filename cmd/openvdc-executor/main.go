@@ -454,6 +454,7 @@ func initConfig() {
 		}
 		log.WithError(err).Fatalf("Failed to load config %s", viper.ConfigFileUsed())
 	}
+	log.Debug(viper.AllSettings())
 }
 
 func init() {
