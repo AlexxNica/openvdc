@@ -3,10 +3,10 @@
 package tests
 
 import (
-	"strings"
-	"testing"
 	"bufio"
 	"bytes"
+	"strings"
+	"testing"
 )
 
 func TestLXCInstance(t *testing.T) {
@@ -25,10 +25,9 @@ func TestLXCInstance(t *testing.T) {
 	RunSshWithTimeoutAndExpectFail(t, executor_lxc_ip, "sudo lxc-info -n "+instance_id, 10, 5)
 }
 
-
 func TestLXCInstance_NICx2(t *testing.T) {
 	stdout, _ := RunCmdAndReportFail(t, "openvdc", "run", "centos/7/lxc",
-	`{"interfaces":[{"type":"veth", "bridge":"linux"}, {"type":"veth", "bridge":"linux"}]}`)
+		`{"interfaces":[{"type":"veth", "bridge":"linux"}, {"type":"veth", "bridge":"linux"}]}`)
 	instance_id := strings.TrimSpace(stdout.String())
 
 	RunCmdAndReportFail(t, "openvdc", "show", instance_id)
@@ -54,8 +53,11 @@ func TestLXCInstance_NICx2(t *testing.T) {
 	line_if00.Scan()
 	line_if00.Scan()
 	t.Log(line_if00.Text())
-	if line_if00.Text() != instance_id + "_00" {
+	if line_if00.Text() != instance_id+"_00" {
 		t.Errorf("Interface %s is not attached", instance_id+"_00")
+		if testing.Verbose() {
+			t.Log(stdout.String())
+		}
 	}
 	lines.Scan()
 	line_if01 := bufio.NewScanner(bytes.NewReader(lines.Bytes()))
@@ -63,8 +65,11 @@ func TestLXCInstance_NICx2(t *testing.T) {
 	// "                                    i-00000000_01"
 	line_if01.Scan()
 	t.Log(line_if01.Text())
-	if line_if01.Text() != instance_id + "_01" {
+	if line_if01.Text() != instance_id+"_01" {
 		t.Errorf("Interface %s is not attached", instance_id+"_01")
+		if testing.Verbose() {
+			t.Log(stdout.String())
+		}
 	}
 
 	RunCmdWithTimeoutAndReportFail(t, 10, 5, "openvdc", "destroy", instance_id)
